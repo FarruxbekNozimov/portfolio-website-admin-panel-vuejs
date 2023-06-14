@@ -19,14 +19,20 @@ export const navLinks = [
   },
   {
     id: 4,
+    name: 'Projects',
+    icon: 'bx bx-bell',
+    path: '/projects'
+  },
+  {
+    id: 4,
     name: 'Notifications',
     icon: 'bx bx-bell',
-    path: '/blog'
+    path: '/notification'
   },
   {
     id: 5,
     name: 'Settings',
     icon: 'bx bx-cog',
-    path: '/blog'
+    path: '/settings'
   }
 ]

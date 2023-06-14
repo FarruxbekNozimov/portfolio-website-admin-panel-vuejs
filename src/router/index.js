@@ -17,6 +17,21 @@ const router = createRouter({
           path: '/about',
           name: 'About',
           component: () => import('@/views/About.vue')
+        },
+        {
+          path: '/blog',
+          name: 'Blog',
+          component: () => import('@/views/Blog.vue')
+        },
+        {
+          path: '/projects',
+          name: 'Projects',
+          component: () => import('@/views/Projects.vue')
+        },
+        {
+          path: '/:pathMatch(.*)*',
+          name: 'Error',
+          component: () => import('@/views/Error.vue')
         }
       ]
     },
@@ -27,5 +42,15 @@ const router = createRouter({
     }
   ]
 })
+
+// router.beforeEach((to, from, next) => {
+//   if (to.name != 'Login' && !localStorage.getItem('token')) {
+//     next('/login')
+//   } else if (to.name == 'Login' && localStorage.getItem('token')) {
+//     next('/')
+//   } else {
+//     next()
+//   }
+// })
 
 export default router

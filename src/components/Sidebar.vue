@@ -24,4 +24,9 @@ import { navLinks } from '../constants/navLinks'
   </div>
 </template>
 
-<style lang="scss" scoped></style>
+<style scoped>
+.router-link-exact-active {
+  background: rgb(6 182 212 / var(--tw-bg-opacity));
+  color: rgb(3 7 18 / var(--tw-text-opacity));
+}
+</style>

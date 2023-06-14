@@ -6,7 +6,7 @@ import Logo from '@/assets/logo.png'
   <div class="h-full flex items-center">
     <form
       action=""
-      class="h-auto w-[40%] p-14 px-14 shadow-cyan-400 shadow mx-auto border border-cyan-500 bg-slate-900/100 rounded-xl"
+      class="h-auto lg:w-[35%] md:w-[100%] py-7 px-14 shadow-cyan-400 shadow mx-auto border border-cyan-500 bg-slate-900/100 rounded-xl"
     >
       <img :src="Logo" alt="" class="h-[150px] mx-auto" />
       <div class="mb-5">
@@ -38,7 +38,7 @@ import Logo from '@/assets/logo.png'
           type="submit"
           class="border border-cyan-500 w-[30%] mx-auto py-2 rounded-lg hover:bg-cyan-500 hover:text-gray-900 duration-300"
         >
-          Submit
+          LOGIN
         </button>
       </div>
     </form>
