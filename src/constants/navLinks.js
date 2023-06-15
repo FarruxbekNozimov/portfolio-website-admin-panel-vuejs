@@ -20,7 +20,7 @@ export const navLinks = [
   {
     id: 4,
     name: 'Projects',
-    icon: 'bx bx-bell',
+    icon: 'bx bx-briefcase',
     path: '/projects'
   },
   {

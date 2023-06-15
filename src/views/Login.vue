@@ -1,12 +1,43 @@
 <script setup>
 import Logo from '@/assets/logo.png'
+import { reactive } from 'vue'
+import { userStore } from '@/stores/user/userStore'
+import { toast } from 'vue3-toastify'
+import { useRouter } from 'vue-router'
+const router = useRouter()
+
+const store = userStore()
+
+const auth = reactive({
+  username: '',
+  password: ''
+})
+
+const loginUser = () => {
+  try {
+    store.LOGIN_USER(auth)
+    toast.success('Successfully Logged in', {
+      autoClose: 1000,
+      theme: 'dark'
+    })
+    setTimeout(() => {
+      router.push('/')
+    }, 1000)
+  } catch (error) {
+    console.log(error)
+    toast.error('Error', {
+      autoClose: 1000,
+      theme: 'dark'
+    })
+  }
+}
 </script>
 
 <template>
   <div class="h-full flex items-center">
     <form
-      action=""
-      class="h-auto lg:w-[35%] md:w-[100%] py-7 px-14 shadow-cyan-400 shadow mx-auto border border-cyan-500 bg-slate-900/100 rounded-xl"
+      @submit.prevent="loginUser"
+      class="h-auto lg:w-[35%] md:w-[60%] py-7 px-14 shadow-cyan-400 shadow mx-auto border border-cyan-500 bg-slate-900/100 rounded-xl"
     >
       <img :src="Logo" alt="" class="h-[150px] mx-auto" />
       <div class="mb-5">
@@ -19,6 +50,7 @@ import Logo from '@/assets/logo.png'
           class="outline-none border text-sm rounded-lg block w-full p-2.5 bg-gray-950 border-gray-500 placeholder-gray-400 text-white focus:ring-cyan-500 focus:border-cyan-500"
           placeholder="Username"
           required
+          v-model="auth.username"
         />
       </div>
       <div class="mb-10">
@@ -30,6 +62,7 @@ import Logo from '@/assets/logo.png'
           id="first_name"
           class="outline-none border text-sm rounded-lg block w-full p-2.5 bg-gray-950 border-gray-500 placeholder-gray-400 text-white focus:ring-cyan-500 focus:border-cyan-500"
           placeholder="Password"
+          v-model="auth.password"
           required
         />
       </div>

@@ -13,10 +13,10 @@ import { navLinks } from '../constants/navLinks'
       <router-link
         v-for="el in navLinks"
         :to="el.path"
-        class="bg-gray-950 duration-300 cursor-pointer px-5 py-3 rounded-xl text-lg mb-5 block group hover:bg-cyan-500 hover:text-gray-950"
+        class="bg-gray-950 duration-300 cursor-pointer px-5 py-3 rounded-xl text-md mb-5 block group hover:bg-cyan-500 hover:text-gray-950"
       >
         <div class="flex items-center gap-2">
-          <i :class="el.icon" class="text-2xl group-hover:bx-tada"></i>
+          <i :class="el.icon" class="text-xl group-hover:bx-tada"></i>
           {{ el.name }}
         </div>
       </router-link>
