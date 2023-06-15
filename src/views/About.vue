@@ -48,10 +48,16 @@ onMounted(() => {
 
 <template>
   <div>
-    <form @submit.prevent="update_about" class="text-center lg:w-[70%] mx-auto">
+    <div v-if="store.LOAD" class="h-full gap-5 flex items-center justify-center">
+      <i class="bx bx-loader-alt animate-spin text-9xl text-cyan-500"></i>
+      <span class="text-5xl">Loading...</span>
+    </div>
+    <form v-else @submit.prevent="update_about" class="text-center lg:w-[70%] mx-auto">
       <div class="lg:flex items-center justify-evenly">
         <div class="lg:w-[30%]">
-          <div class="mx-auto relative mb-5 border-4 border-cyan-500 h-[160px] w-[160px] rounded-full">
+          <div
+            class="mx-auto relative mb-5 border-4 border-cyan-500 h-[160px] w-[160px] rounded-full"
+          >
             <img
               :src="imgURL ? imgURL : store.ABOUT.user_photo"
               class="h-[152px] w-[152px] rounded-full object-cover"

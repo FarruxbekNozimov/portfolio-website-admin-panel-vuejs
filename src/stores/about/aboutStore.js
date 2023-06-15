@@ -5,14 +5,15 @@ import { useAbout } from '../../service/about'
 export const aboutStore = defineStore('about', () => {
   const state = reactive({
     id: '',
-    about: {}
+    about: {},
+    load: true
   })
 
   const GET_ABOUT = async () => {
     try {
       state.about = (await useAbout.GET()).data[0]
       state.id = state.about._id
-      console.log(state.about)
+      state.load = false
     } catch (error) {
       console.log(error)
     }
@@ -29,6 +30,7 @@ export const aboutStore = defineStore('about', () => {
   }
 
   const ABOUT = computed(() => state.about)
+  const LOAD = computed(() => state.load)
 
-  return { GET_ABOUT, ABOUT, UPDATE_ABOUT }
+  return { GET_ABOUT, ABOUT, UPDATE_ABOUT, LOAD }
 })
