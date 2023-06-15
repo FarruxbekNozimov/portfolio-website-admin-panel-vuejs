@@ -1,9 +1,16 @@
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
+import { projectStore } from '@/stores/project/projectStore'
+import { toast } from 'vue3-toastify'
 
+const store = projectStore()
 const addModal = ref(false)
 
 const toggleModal = () => (addModal.value = !addModal.value)
+
+onMounted(() => {
+  store.GET_PROJECT()
+})
 </script>
 
 <template>
@@ -103,23 +110,41 @@ const toggleModal = () => (addModal.value = !addModal.value)
         ADD PROJECT
       </button>
     </div>
-    <div class="grid grid-cols-3 gap-5">
-      <router-link to="/" v-for="el in 10" class="mb-5 bg-gray-700/50 rounded-md p-4">
-        <img
-          src="https://blog.logrocket.com/wp-content/uploads/2021/04/handling-dispatching-events-nodejs.png"
-          class="h-[200px] w-full object-cover rounded-md"
-        />
+    <div v-if="store.LOAD" class="h-full gap-5 flex items-center justify-center">
+      <i class="bx bx-loader-alt animate-spin text-9xl text-cyan-500"></i>
+      <span class="text-5xl">Loading...</span>
+    </div>
+    <div v-else class="grid lg:grid-cols-2 md:grid-cols-2 gap-5">
+      <div v-for="el in store.PROJECT" class="bg-gray-700/50 rounded-md p-4">
+        <a href="">
+          <img :src="el.img" class="h-[250px] w-full object-cover rounded-md" />
+        </a>
         <div class="px-2">
-          <h1 class="pt-4 text-xl text-center border-b border-cyan-500/50 pb-4 mb-6">
-            Courses simple website
-          </h1>
+          <h1 class="pt-4 text-xl text-center mb-4">Courses simple website</h1>
+          <div class="flex items-center justify-between mb-4">
+            <button
+              class="text-sm flex items-center gap-1 bg-cyan-900 hover:bg-cyan-800 px-2 rounded"
+            >
+              <i class="bx bxl-netlify text-xl bg-"></i>
+              VIEW
+            </button>
+            <button
+              class="text-sm flex items-center gap-1 bg-gray-900 hover:bg-gray-950 px-2 rounded"
+            >
+              <i class="bx bxl-github text-xl bg-"></i>
+              DEMO
+            </button>
+          </div>
+          <div class="border-b border-cyan-500/90 mb-5"></div>
         </div>
-
         <div class="flex items-center justify-between">
-          <span class="text-[14px] text-gray-500">14/06/2023</span>
-          <span class="text-[14px] text-gray-500">12:00</span>
+          <i
+            class="bx bx-pencil cursor-pointer hover:bg-green-600 bg-green-500 p-2 rounded-full"
+          ></i>
+          <span class="text-md text-gray-500">14/06/2023</span>
+          <i class="bx bx-trash cursor-pointer hover:bg-red-600 bg-red-500 p-2 rounded-full"></i>
         </div>
-      </router-link>
+      </div>
     </div>
   </div>
 </template>

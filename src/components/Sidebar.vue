@@ -10,10 +10,10 @@ const menuId = ref(1)
   <div
     class="w-96 bg-gray-900 h-screen border-r border-cyan-500 shadow shadow-cyan-500 relative overflow-y-auto"
   >
-    <div class="top-0 left-2 bg-gray-900 gap-2 flex items-center justify-center py-5">
+    <a href="/" class="top-0 left-2 bg-gray-900 gap-2 flex items-center justify-center py-5">
       <img :src="Logo" alt="logo" class="h-[50px]" />
       <span class="text-3xl font-['Kablammo']">FarruxDEV</span>
-    </div>
+    </a>
     <div class="px-5 py-5">
       <div class="">
         <div v-for="el in navLinks">
