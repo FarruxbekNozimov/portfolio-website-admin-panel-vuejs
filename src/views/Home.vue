@@ -39,7 +39,7 @@ initTE({ Chart })
             </div>
             <div>
               <p class="mb-2 text-sm font-medium text-gray-100">User active</p>
-              <p class="text-xl font-semibold text-gray-300">120</p>
+              <p class="text-xl font-semibold text-gray-300">{{ views }}</p>
             </div>
           </div>
           <div class="flex items-center p-4 bg-gray-800 rounded-lg shadow-xs">
@@ -50,7 +50,7 @@ initTE({ Chart })
             </div>
             <div>
               <p class="mb-2 text-sm font-medium text-gray-100">Users suspend</p>
-              <p class="text-xl font-semibold text-gray-300">6389</p>
+              <p class="text-xl font-semibold text-gray-300">{{ views }}</p>
             </div>
           </div>
           <div class="flex items-center p-4 bg-gray-800 rounded-lg shadow-xs">
@@ -61,7 +61,7 @@ initTE({ Chart })
             </div>
             <div>
               <p class="mb-2 text-sm font-medium text-gray-100">User vip</p>
-              <p class="text-xl font-semibold text-gray-300">828</p>
+              <p class="text-xl font-semibold text-gray-300">{{ views }}</p>
             </div>
           </div>
         </div>
@@ -106,7 +106,6 @@ initTE({ Chart })
         </div>
       </div>
       <div class="w-full">
-        <h1>salom</h1>
         <div class="w-full max-w-full px-3 mt-0">
           <canvas
             data-te-chart="line"

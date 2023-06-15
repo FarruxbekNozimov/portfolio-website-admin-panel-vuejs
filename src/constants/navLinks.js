@@ -6,6 +6,24 @@ export const navLinks = [
     path: '/'
   },
   {
+    id: 4,
+    name: 'Projects',
+    icon: 'bx bx-briefcase',
+    path: '/projects'
+  },
+  {
+    id: 4,
+    name: 'Experience',
+    icon: 'bx bx-signal-4',
+    path: '/experience'
+  },
+  {
+    id: 4,
+    name: 'Skills',
+    icon: 'bx bx-dumbbell',
+    path: '/skills'
+  },
+  {
     id: 2,
     name: 'About',
     icon: 'bx bx-user-pin',
@@ -16,12 +34,6 @@ export const navLinks = [
     name: 'Blog',
     icon: 'bx bx-code-block',
     path: '/blog'
-  },
-  {
-    id: 4,
-    name: 'Projects',
-    icon: 'bx bx-briefcase',
-    path: '/projects'
   },
   {
     id: 4,

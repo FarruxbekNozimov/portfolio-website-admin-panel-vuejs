@@ -1,11 +1,11 @@
 <script>
-import Editor from '@tinymce/tinymce-vue'
-tinymce.init({
-  selector: 'textarea', // change this value according to your HTML
-  plugins: 'a_tinymce_plugin',
-  a_plugin_option: true,
-  a_configuration_option: 400
-})
+// import Editor from '@tinymce/tinymce-vue'
+// tinymce.init({
+//   selector: 'textarea', // change this value according to your HTML
+//   plugins: 'a_tinymce_plugin',
+//   a_plugin_option: true,
+//   a_configuration_option: 400
+// })
 </script>
 
 <template>

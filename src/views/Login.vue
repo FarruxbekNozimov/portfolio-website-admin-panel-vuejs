@@ -5,7 +5,6 @@ import { userStore } from '@/stores/user/userStore'
 import { toast } from 'vue3-toastify'
 import { useRouter } from 'vue-router'
 const router = useRouter()
-
 const store = userStore()
 
 const auth = reactive({

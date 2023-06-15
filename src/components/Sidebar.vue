@@ -4,8 +4,10 @@ import { navLinks } from '../constants/navLinks'
 </script>
 
 <template>
-  <div class="w-96 bg-gray-900 h-screen border-r border-cyan-500 shadow shadow-cyan-500 relative">
-    <div class="w-full gap-2 flex items-center justify-center py-5">
+  <div
+    class="w-96 bg-gray-900 h-screen border-r border-cyan-500 shadow shadow-cyan-500 relative overflow-y-auto pt-20"
+  >
+    <div class="fixed top-0 left-2 bg-gray-900 w-72 gap-2 flex items-center justify-center py-5">
       <img :src="Logo" alt="logo" class="h-[50px]" />
       <span class="text-3xl font-['Kablammo']">FarruxDEV</span>
     </div>

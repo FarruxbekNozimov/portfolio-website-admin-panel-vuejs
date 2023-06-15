@@ -1,65 +1,111 @@
 <script setup>
-import Logo from '@/assets/logo.png'
-import { ref, reactive } from 'vue'
+import { onMounted, ref } from 'vue'
+import { aboutStore } from '@/stores/about/aboutStore'
+// import { useUpload } from '../service/upload/index.js'
+import { toast } from 'vue3-toastify'
 
-const about = reactive({
-  user_photo: 'https://icon-library.com/images/arabic-icon/arabic-icon-13.jpg',
-  fullname: 'FarruxDEV',
-  email: 'farruxbek@gmail.com',
-  phone: '998887038006',
-  description: 'Hello I am Developer'
+const file = ref('')
+const imgURL = ref('')
+const store = aboutStore()
+
+const uploadFile = async (event) => {
+  file.value = event.target.files[0]
+
+  if (['png', 'gif', 'jpg'].includes(file.value.type.split('/')[1])) {
+    const blobUrl = URL.createObjectURL(file.value)
+    imgURL.value = blobUrl
+    console.log(imgURL.value)
+    // useUpload.UPLOAD(imgURL)
+    console.log(file.value)
+  } else {
+    toast.error('Image must be PNG,GIF,JPG', {
+      autoClose: 1000,
+      theme: 'dark'
+    })
+  }
+}
+
+const update_about = () => {
+  try {
+    store.UPDATE_ABOUT()
+    toast.success('Successfully Logged in', {
+      autoClose: 1000,
+      theme: 'dark'
+    })
+  } catch (error) {
+    console.log(error)
+    toast.error('Error', {
+      autoClose: 1000,
+      theme: 'dark'
+    })
+  }
+}
+
+onMounted(() => {
+  store.GET_ABOUT()
 })
 </script>
 
 <template>
   <div>
-    <form class="text-center w-[70%] mx-auto">
-      <div class="flex items-center justify-evenly">
-        <div class="w-[25%]">
-          <div
-            class="relative mb-5 mx-auto border-2 border-cyan-500 h-[150px] w-[150px] rounded-full"
-          >
-            <img :src="about.user_photo" class="h-[150px] w-[150px] rounded-full" />
+    <form @submit.prevent="update_about" class="text-center lg:w-[70%] mx-auto">
+      <div class="lg:flex items-center justify-evenly">
+        <div class="lg:w-[30%]">
+          <div class="mx-auto relative mb-5 border-4 border-cyan-500 h-[160px] w-[160px] rounded-full">
+            <img
+              :src="imgURL ? imgURL : store.ABOUT.user_photo"
+              class="h-[152px] w-[152px] rounded-full object-cover"
+            />
             <label
-              class="absolute -top-0 -right-0 cursor-pointer bg-cyan-300 rounded-full px-1 text-2xl hover:bg-cyan-400 border-2 border-cyan-500 text-black bx bx-x"
+              class="absolute -top-0 -right-0 cursor-pointer bg-cyan-200 rounded-full px-1 text-2xl hover:bg-cyan-500 border-4 border-cyan-500 text-black bx bxs-cloud-upload"
               for="file_input"
             ></label>
-            <input class="hidden" id="file_input" type="file" />
+            <input
+              class="hidden"
+              id="file_input"
+              type="file"
+              @change="uploadFile"
+              accept=".png, .gif, .jpg"
+            />
           </div>
         </div>
-        <div class="w-[75%]">
+        <div class="text-start lg:w-[75%]">
+          <label>Fullname</label>
           <input
             type="text"
             id="first_name"
             class="mb-5 outline-none border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-cyan-500 focus:border-cyan-500"
             placeholder="Fullname"
-            v-model="about.fullname"
+            v-model="store.ABOUT.fullname"
           />
+          <label>Email</label>
           <input
             type="text"
             id="first_name"
             class="mb-5 outline-none border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-cyan-500 focus:border-cyan-500"
             placeholder="Email"
-            v-model="about.email"
+            v-model="store.ABOUT.email"
           />
         </div>
       </div>
-      <div class="w-full">
+      <div class="text-start w-full">
+        <label>Phone </label>
         <input
           type="text"
           id="first_name"
           class="mb-5 outline-none border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-cyan-500 focus:border-cyan-500"
           placeholder="Phone"
-          v-model="about.phone"
+          v-model="store.ABOUT.phone"
         />
       </div>
-      <div class="mx-auto w-full">
+      <div class="text-start mx-auto w-full">
+        <label>About Me </label>
         <textarea
           id="message"
-          rows="5"
+          rows="4"
           class="block p-2.5 w-full text-sm rounded-lg border bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-cyan-500 focus:border-cyan-500 mb-5 outline-none"
           placeholder="About Me"
-          v-model="about.description"
+          v-model="store.ABOUT.description"
         ></textarea>
       </div>
       <button
