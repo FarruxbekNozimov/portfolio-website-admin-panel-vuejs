@@ -4,27 +4,57 @@ import { useBlog } from '../../service/blog'
 
 export const blogStore = defineStore('blog', () => {
   const state = reactive({
-    blog: {}
+    blog: {},
+    load: true
   })
+
+  const ADD_BLOG = async (data) => {
+    try {
+      await useBlog.POST(data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   const GET_BLOG = async () => {
     try {
-      state.blog = (await useBlog.GET()).data[0]
+      state.blog = (await useBlog.GET()).data
+      state.load = false
       console.log(state.blog)
     } catch (error) {
       console.log(error)
     }
   }
 
-  const UPDATE_BLOG = async () => {
+  const GET_ONE = async (id) => {
+    await GET_BLOG()
+    for (let i in state.blog) {
+      if (state.blog[i]._id == id) {
+        return state.blog[i]
+      }
+    }
+  }
+
+  const UPDATE_BLOG = async (id, post) => {
     try {
-      state.blog = (await useBlog.UPDATE(state.id, state.blog)).data
+      state.blog = (await useBlog.UPDATE(id, post)).data
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const DELETE_BLOG = async (id) => {
+    try {
+      await useBlog.DELETE(id)
+      await GET_BLOG()
+      console.log('DELETED')
     } catch (error) {
       console.log(error)
     }
   }
 
   const BLOG = computed(() => state.blog)
+  const LOAD = computed(() => state.load)
 
-  return { GET_BLOG, BLOG, UPDATE_BLOG }
+  return { ADD_BLOG, GET_BLOG, BLOG, UPDATE_BLOG, GET_ONE, LOAD, DELETE_BLOG }
 })

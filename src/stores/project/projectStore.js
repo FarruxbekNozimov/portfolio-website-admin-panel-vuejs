@@ -9,6 +9,15 @@ export const projectStore = defineStore('project', () => {
     load: true
   })
 
+  const ADD_PROJECT = async (newData) => {
+    try {
+      console.log(newData)
+      state.project = (await useProject.POST(newData)).data
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   const GET_PROJECT = async () => {
     try {
       state.project = (await useProject.GET()).data
@@ -30,5 +39,5 @@ export const projectStore = defineStore('project', () => {
   const PROJECT = computed(() => state.project)
   const LOAD = computed(() => state.load)
 
-  return { GET_PROJECT, PROJECT, UPDATE_PROJECT, LOAD }
+  return { GET_PROJECT, PROJECT, UPDATE_PROJECT, LOAD, ADD_PROJECT }
 })

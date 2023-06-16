@@ -1,12 +1,49 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, reactive } from 'vue'
 import { projectStore } from '@/stores/project/projectStore'
+import moment from 'moment'
 import { toast } from 'vue3-toastify'
 
 const store = projectStore()
 const addModal = ref(false)
+const projectImg = ref(null)
+
+const setImg = (e) => {
+  projectImg.value = null
+  projectImg.value = e.target.files[0]
+}
+const newProject = reactive({
+  title: '',
+  tags: '',
+  demo: '',
+  preview: '',
+  img: '',
+  description: ''
+})
 
 const toggleModal = () => (addModal.value = !addModal.value)
+
+const upload = Upload({
+  apiKey: 'public_FW25bPH57fq2D4VY8sRGufVHTAk6' // Your real API key.
+})
+
+const addProject = async () => {
+  try {
+    const { fileUrl } = await upload.uploadFile(projectImg.value)
+    newProject.img = fileUrl
+    store.ADD_PROJECT(newProject)
+    toggleModal()
+    toast.success('Successfully project added', {
+      autoClose: 1000,
+      theme: 'dark'
+    })
+  } catch (e) {
+    toast.success(`Error ${e}`, {
+      autoClose: 1000,
+      theme: 'dark'
+    })
+  }
+}
 
 onMounted(() => {
   store.GET_PROJECT()
@@ -31,7 +68,7 @@ onMounted(() => {
           </button>
           <div class="px-6 py-6 lg:px-8">
             <h3 class="mb-4 text-xl text-white">Add New Project</h3>
-            <form class="space-y-4 grid" action="#">
+            <form @submit.prevent="addProject" class="space-y-4 grid" action="#">
               <div class="grid grid-cols-2 gap-3">
                 <div>
                   <input
@@ -39,6 +76,7 @@ onMounted(() => {
                     class="border text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 block w-full p-3 bg-gray-800 border-gray-500 outline-none focus:bg-gray-700 text-white"
                     placeholder="Project title"
                     required
+                    v-model="newProject.title"
                   />
                 </div>
                 <div>
@@ -47,6 +85,7 @@ onMounted(() => {
                     class="border text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 block w-full p-3 bg-gray-800 border-gray-500 outline-none focus:bg-gray-700 text-white"
                     placeholder="Project tags"
                     required
+                    v-model="newProject.tags"
                   />
                 </div>
                 <div>
@@ -55,6 +94,7 @@ onMounted(() => {
                     class="border text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 block w-full p-3 bg-gray-800 border-gray-500 outline-none focus:bg-gray-700 text-white"
                     placeholder="Website link"
                     required
+                    v-model="newProject.preview"
                   />
                 </div>
                 <div>
@@ -63,6 +103,7 @@ onMounted(() => {
                     class="border text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 block w-full p-3 bg-gray-800 border-gray-500 outline-none focus:bg-gray-700 text-white"
                     placeholder="Github demo"
                     required
+                    v-model="newProject.demo"
                   />
                 </div>
               </div>
@@ -72,6 +113,7 @@ onMounted(() => {
                   rows="3"
                   class="outline-none block p-2.5 w-full text-sm rounded-lg border bg-gray-800 border-gray-500 text-white focus:ring-cyan-500 focus:border-cyan-500 focus:bg-gray-700"
                   placeholder="Write description for project..."
+                  v-model="newProject.description"
                 ></textarea>
               </div>
               <div class="flex items-center justify-center w-full">
@@ -86,7 +128,8 @@ onMounted(() => {
                     </p>
                     <p class="text-xs text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
                   </div>
-                  <input id="dropzone-file" type="file" class="hidden" />
+                  <input id="dropzone-file" type="file" class="hidden" @change="(e) => setImg(e)" />
+                  />
                 </label>
               </div>
               <button
@@ -120,20 +163,24 @@ onMounted(() => {
           <img :src="el.img" class="h-[250px] w-full object-cover rounded-md" />
         </a>
         <div class="px-2">
-          <h1 class="pt-4 text-xl text-center mb-4">Courses simple website</h1>
+          <h1 class="pt-4 text-xl text-center mb-4">{{ el.title }}</h1>
           <div class="flex items-center justify-between mb-4">
-            <button
+            <a
+              target="_blank"
+              :href="el.preview"
               class="text-sm flex items-center gap-1 bg-cyan-900 hover:bg-cyan-800 px-2 rounded"
             >
               <i class="bx bxl-netlify text-xl bg-"></i>
               VIEW
-            </button>
-            <button
+            </a>
+            <a
+              target="_blank"
+              :href="el.demo"
               class="text-sm flex items-center gap-1 bg-gray-900 hover:bg-gray-950 px-2 rounded"
             >
-              <i class="bx bxl-github text-xl bg-"></i>
+              <i class="bx bxl-github text-xl text-white"></i>
               DEMO
-            </button>
+            </a>
           </div>
           <div class="border-b border-cyan-500/90 mb-5"></div>
         </div>
@@ -141,7 +188,7 @@ onMounted(() => {
           <i
             class="bx bx-pencil cursor-pointer hover:bg-green-600 bg-green-500 p-2 rounded-full"
           ></i>
-          <span class="text-md text-gray-500">14/06/2023</span>
+          <span class="text-md text-gray-500">{{ moment(el.createdAt).format('L') }}</span>
           <i class="bx bx-trash cursor-pointer hover:bg-red-600 bg-red-500 p-2 rounded-full"></i>
         </div>
       </div>

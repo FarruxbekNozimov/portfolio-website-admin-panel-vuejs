@@ -1,6 +1,7 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { aboutStore } from '@/stores/about/aboutStore'
+import Loading from '../components/Loading.vue'
 // import { useUpload } from '../service/upload/index.js'
 import { toast } from 'vue3-toastify'
 
@@ -48,10 +49,7 @@ onMounted(() => {
 
 <template>
   <div>
-    <div v-if="store.LOAD" class="h-full gap-5 flex items-center justify-center">
-      <i class="bx bx-loader-alt animate-spin text-9xl text-cyan-500"></i>
-      <span class="text-5xl">Loading...</span>
-    </div>
+    <Loading v-if="store.LOAD" />
     <form v-else @submit.prevent="update_about" class="text-center lg:w-[70%] mx-auto">
       <div class="lg:flex items-center justify-evenly">
         <div class="lg:w-[30%]">
