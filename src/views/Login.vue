@@ -19,9 +19,7 @@ const loginUser = () => {
       autoClose: 1000,
       theme: 'dark'
     })
-    setTimeout(() => {
-      router.push('/')
-    }, 1000)
+    router.push('/')
   } catch (error) {
     console.log(error)
     toast.error('Error', {

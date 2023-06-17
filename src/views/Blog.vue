@@ -33,7 +33,6 @@ onMounted(() => {
 
 <template>
   <div>
-    {{ deleteId }}
     <div
       class="fixed top-0 left-0 right-0 z-50 p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-full max-h-full flex items-center justify-center bg-black/50"
       :class="deleteModal ? '' : 'hidden'"
