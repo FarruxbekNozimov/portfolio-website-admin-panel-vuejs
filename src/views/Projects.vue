@@ -32,6 +32,7 @@ const addProject = async () => {
     const { fileUrl } = await upload.uploadFile(projectImg.value)
     newProject.img = fileUrl
     store.ADD_PROJECT(newProject)
+    for (let i in newExperience) newExperience[i] = ''
     toggleModal()
     toast.success('Successfully project added', {
       autoClose: 1000,
