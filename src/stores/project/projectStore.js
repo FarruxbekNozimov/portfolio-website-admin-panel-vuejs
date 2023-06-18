@@ -36,8 +36,17 @@ export const projectStore = defineStore('project', () => {
     }
   }
 
+  const DELETE_PROJECT = async (id) => {
+    try {
+      await useProject.DELETE(id)
+      GET_PROJECT()
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   const PROJECT = computed(() => state.project)
   const LOAD = computed(() => state.load)
 
-  return { GET_PROJECT, PROJECT, UPDATE_PROJECT, LOAD, ADD_PROJECT }
+  return { GET_PROJECT, PROJECT, UPDATE_PROJECT, LOAD, ADD_PROJECT, DELETE_PROJECT }
 })

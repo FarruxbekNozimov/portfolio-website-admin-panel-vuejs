@@ -1,4 +1,5 @@
 <script setup>
+import Loading from '../components/Loading.vue'
 import { onMounted, ref, reactive } from 'vue'
 import { projectStore } from '@/stores/project/projectStore'
 import moment from 'moment'
@@ -7,6 +8,9 @@ import { toast } from 'vue3-toastify'
 const store = projectStore()
 const addModal = ref(false)
 const projectImg = ref(null)
+const deleteModal = ref(false)
+const deleteId = ref(null)
+const updateId = ref(null)
 
 const setImg = (e) => {
   projectImg.value = null
@@ -21,10 +25,15 @@ const newProject = reactive({
   description: ''
 })
 
-const toggleModal = () => (addModal.value = !addModal.value)
+const toggleModal = () => {
+  addModal.value = !addModal.value
+  console.log(addModal.value, newProject)
+  // if (!addModal.value) for (let i in newProject) newProject[i] = ''
+}
+const toggleDelete = () => (deleteModal.value = !deleteModal.value)
 
 const upload = Upload({
-  apiKey: 'public_FW25bPH57fq2D4VY8sRGufVHTAk6' // Your real API key.
+  apiKey: 'public_FW25bPH57fq2D4VY8sRGufVHTAk6'
 })
 
 const addProject = async () => {
@@ -32,17 +41,21 @@ const addProject = async () => {
     const { fileUrl } = await upload.uploadFile(projectImg.value)
     newProject.img = fileUrl
     store.ADD_PROJECT(newProject)
-    for (let i in newExperience) newExperience[i] = ''
+    for (let i in newProject) newProject[i] = ''
     toggleModal()
-    toast.success('Successfully project added', {
-      autoClose: 1000,
-      theme: 'dark'
-    })
+    toast.success('Successfully project added', { autoClose: 1000, theme: 'dark' })
   } catch (e) {
-    toast.success(`Error ${e}`, {
-      autoClose: 1000,
-      theme: 'dark'
-    })
+    toast.success(`Error ${e}`, { autoClose: 1000, theme: 'dark' })
+  }
+}
+const deleteProject = async () => {
+  try {
+    store.DELETE_PROJECT(deleteId.value)
+    toggleDelete()
+    toast.success('Successfully experience deleted', { autoClose: 1000, theme: 'dark' })
+  } catch (e) {
+    console.log(e)
+    toast.success(`Error ${e}`, { autoClose: 1000, theme: 'dark' })
   }
 }
 
@@ -53,6 +66,44 @@ onMounted(() => {
 
 <template>
   <div>
+    <!-- DELETE MODAL -->
+    <div
+      class="fixed top-0 left-0 right-0 z-50 p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-full max-h-full flex items-center justify-center bg-black/50"
+      :class="deleteModal ? '' : 'hidden'"
+    >
+      <div class="relative w-full max-w-md max-h-full">
+        <div class="relative rounded-lg shadow bg-gray-700">
+          <button
+            class="absolute top-3 right-2.5 text-gray-400 bg-transparent rounded-lg text-sm p-1 ml-auto inline-flex items-center hover:bg-gray-800 hover:text-white"
+            @click="toggleDelete"
+          >
+            <i class="bx bx-x text-2xl px-1"></i>
+            <span class="sr-only">Close modal</span>
+          </button>
+          <div class="p-6 text-center">
+            <i class="bx bx-bug text-5xl p-5"></i>
+            <h3 class="mb-5 text-lg font-normal text-gray-400">
+              Are you sure you want to delete this Project?
+            </h3>
+            <button
+              class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2"
+              @click="deleteProject"
+            >
+              Yes, I'm sure
+            </button>
+            <button
+              data-modal-hide="popup-modal"
+              type="button"
+              class="focus:ring-4 focus:outline-none rounded-lg border text-sm font-medium px-5 py-2.5 focus:z-10 bg-gray-700 text-gray-300 border-gray-500 hover:text-white hover:bg-gray-600 focus:ring-gray-600"
+              @click="toggleDelete"
+            >
+              No, cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div
       class="fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-screen flex items-center justify-center max-h-full bg-black/60"
       :class="addModal ? '' : 'hidden'"
@@ -120,9 +171,9 @@ onMounted(() => {
               <div class="flex items-center justify-center w-full">
                 <label
                   for="dropzone-file"
-                  class="flex flex-col items-center justify-center w-full h-36 border border-dashed rounded-lg cursor-pointer bg-gray-800 border-gray-500 hover:border-cyan-500 hover:bg-gray-700"
+                  class="flex flex-col items-center justify-center w-full h-36 border border-dashed rounded-lg cursor-pointer bg-gray-800 border-gray-500 hover:border-cyan-500 hover:bg-gray-700 relative"
                 >
-                  <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                  <div class="z-10 flex flex-col items-center justify-center pt-5 pb-6">
                     <i class="bx bx-cloud-upload text-5xl"></i>
                     <p class="mb-2 text-sm text-gray-400">
                       <span class="font-semibold">Click to upload</span> or drag and drop
@@ -130,14 +181,12 @@ onMounted(() => {
                     <p class="text-xs text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
                   </div>
                   <input id="dropzone-file" type="file" class="hidden" @change="(e) => setImg(e)" />
-                  />
                 </label>
               </div>
               <button
-                type="submit"
                 class="w-full text-white focus:ring-4 focus:outline-none rounded-lg text-sm px-5 py-2.5 text-center bg-cyan-600 hover:bg-cyan-700 focus:ring-cyan-800"
               >
-                Add Project
+                {{ updateId ? 'Edit Project' : 'Add Project' }}
               </button>
             </form>
           </div>
@@ -154,11 +203,8 @@ onMounted(() => {
         ADD PROJECT
       </button>
     </div>
-    <div v-if="store.LOAD" class="h-full gap-5 flex items-center justify-center">
-      <i class="bx bx-loader-alt animate-spin text-9xl text-cyan-500"></i>
-      <span class="text-5xl">Loading...</span>
-    </div>
-    <div v-else class="grid lg:grid-cols-2 md:grid-cols-2 gap-5">
+    <Loading v-if="store.LOAD" />
+    <div v-else class="grid lg:grid-cols-2 md:grid-cols-1 gap-5">
       <div v-for="el in store.PROJECT" class="bg-gray-700/50 rounded-md p-4">
         <a href="">
           <img :src="el.img" class="h-[250px] w-full object-cover rounded-md" />
@@ -188,9 +234,24 @@ onMounted(() => {
         <div class="flex items-center justify-between">
           <i
             class="bx bx-pencil cursor-pointer hover:bg-green-600 bg-green-500 p-2 rounded-full"
+            @click="
+              () => {
+                updateId = el._id
+                newProject = { ...el }
+                toggleModal()
+              }
+            "
           ></i>
           <span class="text-md text-gray-500">{{ moment(el.createdAt).format('L') }}</span>
-          <i class="bx bx-trash cursor-pointer hover:bg-red-600 bg-red-500 p-2 rounded-full"></i>
+          <i
+            class="bx bx-trash cursor-pointer hover:bg-red-600 bg-red-500 p-2 rounded-full"
+            @click="
+              () => {
+                deleteId = el._id
+                toggleDelete()
+              }
+            "
+          ></i>
         </div>
       </div>
     </div>

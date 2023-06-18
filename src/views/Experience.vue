@@ -7,9 +7,9 @@ import { toast } from 'vue3-toastify'
 
 const store = experienceStore()
 const addModal = ref(false)
+const updateId = ref(null)
 const deleteModal = ref(false)
 const deleteId = ref(null)
-const updateId = ref(null)
 
 const updateContent = reactive({
   name: '',
@@ -48,7 +48,6 @@ const deleteExperience = async () => {
     toast.success(`Error ${e}`, { autoClose: 1000, theme: 'dark' })
   }
 }
-
 const updateExperience = async () => {
   try {
     await store.UPDATE_EXPERIENCE(updateId.value, updateContent)
@@ -67,7 +66,6 @@ onMounted(() => {
 
 <template>
   <div>
-    {{ deleteId }}
     <!-- DELETE MODAL -->
     <div
       class="fixed top-0 left-0 right-0 z-50 p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-full max-h-full flex items-center justify-center bg-black/50"
@@ -85,7 +83,7 @@ onMounted(() => {
           <div class="p-6 text-center">
             <i class="bx bx-bug text-5xl p-5"></i>
             <h3 class="mb-5 text-lg font-normal text-gray-400">
-              Are you sure you want to delete this post?
+              Are you sure you want to delete this Experience?
             </h3>
             <button
               class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2"
@@ -105,6 +103,7 @@ onMounted(() => {
         </div>
       </div>
     </div>
+
     <!-- ADD MODAL -->
     <div
       class="fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-screen flex items-center justify-center max-h-full bg-black/60"
