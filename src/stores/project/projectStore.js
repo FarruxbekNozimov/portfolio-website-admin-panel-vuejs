@@ -28,9 +28,9 @@ export const projectStore = defineStore('project', () => {
     }
   }
 
-  const UPDATE_PROJECT = async () => {
+  const UPDATE_PROJECT = async (id, data) => {
     try {
-      state.project = (await useProject.UPDATE(state.id, state.project)).data
+      state.project = (await useProject.UPDATE(id, data)).data
     } catch (error) {
       console.log(error)
     }
